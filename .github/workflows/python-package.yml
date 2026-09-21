@@ -1,16 +1,12 @@
-name: Python Coverage
+name: Python package
 
 on:
   pull_request:
     branches:
       - main
 
-permissions:
-  contents: read
-  pull-requests: write
-
 jobs:
-  coverage:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,15 +24,6 @@ jobs:
           python -m pip install -r requirements.txt
           python -m pip install pytest pytest-cov coverage
 
-      - name: Run tests with coverage
+      - name: Test with pytest
         run: |
-          PYTHONPATH=src pytest tests/calculations_test.py --cov=calculations --cov-report=term-missing --cov-report=xml
-
-      - name: Publish coverage to PR
-        uses: orgoro/coverage@v3.1
-        with:
-          coverageFile: coverage.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
-          thresholdAll: 0
-          thresholdNew: 0
-          thresholdModified: 0
+          PYTHONPATH=src pytest -q tests/calculations_test.py -vv --maxfail=1 --disable-warnings
