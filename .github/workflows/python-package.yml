@@ -1,4 +1,5 @@
-name: Python package
+# check if the code is working as expected
+name: Python package   
 
 on:
   pull_request:
